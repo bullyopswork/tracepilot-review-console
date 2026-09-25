@@ -2,7 +2,9 @@
 
 A synthetic, full-stack study of a practical AI-agent failure: an answer can sound helpful while missing the task's dates, budget, accessibility requirement, or round-trip fare. This console lets a reviewer inspect the trace and explicit checks before deciding whether a revised task should be used.
 
-**Current status:** the synthetic reviewer journey works locally, but this repository is not yet published or hosted. The original [TracePilot Python agent proof](https://github.com/bullyopswork/tracepilot) is a separate project; this console does not run that agent or use its Cloud Run deployment.
+**Live synthetic demo:** https://tracepilot-review-console.vercel.app/
+
+The public reviewer journey is hosted on Vercel with a separate Neon Free-plan PostgreSQL project. The original [TracePilot Python agent proof](https://github.com/bullyopswork/tracepilot) is a separate project; this console does not run that agent or use its Cloud Run deployment.
 
 ## Reviewer path
 
@@ -36,7 +38,7 @@ Open `http://localhost:3000`. Run `npm test`, `npm run typecheck`, and `npm run 
 - Transaction-guarded approval and follow-up transitions with idempotency keys; approving a proposal and executing a follow-up are separate actions. Proposal creation and retained anonymous sessions have hard caps, and write requests require same-origin JSON with a streamed body limit.
 - Session access expires after 30 days. A protected Vercel cron route is configured for daily cleanup of up to 100 expired workspaces per run; new-session creation also performs bounded cleanup. Local operators can run `npm run db:cleanup-expired`. Batched cleanup can lag behind expiration, so expiration is not a promise of immediate deletion.
 
-For public hosting, provide a dedicated PostgreSQL `DATABASE_URL` and a server-only `CRON_SECRET` in the deployment environment. Production fails closed without PostgreSQL. Verify that the scheduled cleanup actually runs before representing it as an active retention control. The global visitor cap bounds storage but is not per-IP rate limiting or a guarantee of public availability under abuse.
+For public hosting, provide a dedicated PostgreSQL `DATABASE_URL` and a server-only `CRON_SECRET` in the deployment environment. Production fails closed without PostgreSQL. The live deployment has these as hidden Vercel secrets. Its daily cleanup is configured, but the first scheduled execution has not yet been observed; do not treat it as a verified retention-control run. The global visitor cap bounds storage but is not per-IP rate limiting or a guarantee of public availability under abuse.
 
 This is a portfolio demo, not a production agent-operations platform. It does not implement real authentication, import untrusted external traces, or execute arbitrary tools. Any future live-model adapter would need a separate server-only key, cost/rate bounds, and an explicit UI source label.
 
