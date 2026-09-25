@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: tracepilot_console_test
+        ports:
+          - 55432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d tracepilot_console_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:55432/tracepilot_console_test
+      INTEGRATION_BASE_URL: http://127.0.0.1:3007
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run typecheck
+      - run: npm run build
+      - run: npm run db:migrate
+      - run: npm run db:seed
+      - name: Verify live HTTP and PostgreSQL reviewer journey
+        run: |
+          npm run start -- -p 3007 > /tmp/tracepilot-console-next.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl --silent --fail http://127.0.0.1:3007/api/health > /dev/null; then break; fi
+            sleep 1
+          done
+          curl --silent --fail http://127.0.0.1:3007/api/health > /dev/null
+          node --import tsx scripts/integration.mts
