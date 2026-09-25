@@ -139,6 +139,18 @@ export default function Home() {
   const resultRef = useRef<HTMLDivElement>(null);
   const proposalRef = useRef<HTMLElement>(null);
   const comparisonRef = useRef<HTMLElement>(null);
+  const runNavRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (!selectedId || !window.matchMedia("(max-width: 920px)").matches) return;
+    const nav = runNavRef.current;
+    const selected = nav?.querySelector<HTMLButtonElement>(".run-nav-item.active");
+    if (!nav || !selected || nav.scrollWidth <= nav.clientWidth) return;
+    const navBox = nav.getBoundingClientRect();
+    const selectedBox = selected.getBoundingClientRect();
+    const offset = selectedBox.left + selectedBox.width / 2 - navBox.left - navBox.width / 2;
+    nav.scrollTo({ left: nav.scrollLeft + offset, behavior: "smooth" });
+  }, [selectedId]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -331,7 +343,7 @@ export default function Home() {
         <div className="sidebar-heading"><span>RUN LIBRARY</span><span className="sidebar-count">{runs.length.toString().padStart(2, "0")}</span></div>
         <p className="sidebar-swipe-hint">Swipe to browse runs <span aria-hidden="true">→</span></p>
         <p className="sidebar-note">A closer look at what an agent did—and what it missed.</p>
-        <nav className="run-nav" aria-label="Sample runs">
+        <nav className="run-nav" aria-label="Sample runs" ref={runNavRef}>
           {listLoading && <div className="sidebar-state" role="status">Loading sample runs…</div>}
           {listError && <div className="sidebar-state error" role="alert">{listError}</div>}
           {!listLoading && !listError && runs.length === 0 && <div className="sidebar-state">No sample runs available.</div>}
