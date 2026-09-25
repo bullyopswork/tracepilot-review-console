@@ -39,6 +39,7 @@ a { color: inherit; }
 .brand-subtitle { color: #afc5c2; font-size: 10px; letter-spacing: .2em; font-weight: 700; text-transform: uppercase; margin-top: 7px; }
 .sidebar-rule { border-top: 1px solid var(--navy-line); margin: 4px 8px 29px; }
 .sidebar-heading { display: flex; justify-content: space-between; margin: 0 9px; font: 700 10px/1.2 Arial, sans-serif; letter-spacing: .19em; color: #99b2ad; }
+.sidebar-swipe-hint { display: none; }
 .sidebar-count { color: var(--lime); }
 .sidebar-note { font-size: 14px; line-height: 1.55; color: #a7bfba; margin: 13px 9px 22px; max-width: 225px; }
 .run-nav { display: flex; flex-direction: column; gap: 9px; overflow-y: auto; padding: 0 2px 5px; }
@@ -78,6 +79,7 @@ a { color: inherit; }
 .page-intro h1 { font-family: Georgia, "Times New Roman", serif; letter-spacing: -.055em; font-weight: 400; font-size: clamp(48px, 5.3vw, 82px); line-height: .98; margin: 0 0 19px; }
 .page-intro h1 em, .section-heading h2 em { font-weight: 400; color: #618075; }
 .page-intro p { font-size: 16px; line-height: 1.65; color: var(--ink-soft); max-width: 600px; margin: 0; }
+.mobile-evidence-jump { display: none; }
 .intro-meta { min-width: 200px; display: flex; flex-direction: column; gap: 8px; padding-bottom: 4px; align-items: flex-start; }
 .meta-eyebrow { color: #688179; }
 .intro-meta strong { font-family: Georgia, serif; font-size: 22px; font-weight: 400; max-width: 240px; line-height: 1.2; }
@@ -176,6 +178,14 @@ a { color: inherit; }
 .proposal-status.status-executed { background: #e0eefa; color: #315a70; }
 .proposal-card h3 { margin: 20px 0 13px; font: 400 29px/1.2 Georgia, serif; }
 .proposal-task { margin: 0; color: #3d5651; font: 400 18px/1.65 Georgia, serif; white-space: pre-wrap; }
+.proposal-checklist { margin-top: 24px; padding: 19px 22px; border: 1px solid #d5e4d7; border-radius: 8px; background: #f3f8ef; }
+.proposal-checklist > strong { color: #385d49; font: 700 11px/1.4 "Courier New", monospace; letter-spacing: .1em; text-transform: uppercase; }
+.proposal-checklist ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 24px; margin: 15px 0; padding-left: 18px; color: #25463d; font-size: 14px; line-height: 1.45; }
+.proposal-checklist li::marker { color: #689157; }
+.proposal-checklist p { margin: 0; color: #536f60; font-size: 12px; line-height: 1.5; }
+.proposal-full-task { margin-top: 19px; color: #385f50; font-size: 13px; }
+.proposal-full-task summary { width: fit-content; cursor: pointer; font-weight: 700; text-underline-offset: 3px; }
+.proposal-full-task p { margin: 13px 0 0; color: #415d55; font: 15px/1.6 Georgia, serif; white-space: pre-wrap; }
 .proposal-source { margin: 22px 0 0; padding-top: 15px; border-top: 1px solid var(--line); color: #547168; font-size: 12px; }
 .decision-form, .review-followup { margin-top: 27px; padding-top: 25px; border-top: 1px solid var(--line); }
 .decision-form label { display: block; font-size: 13px; font-weight: 700; }
@@ -225,6 +235,8 @@ a { color: inherit; }
   .brand-row { padding: 3px 0 13px; }
   .sidebar-rule, .sidebar-note, .sidebar-bottom { display: none; }
   .sidebar-heading { margin: 0 0 9px; }
+  .sidebar-swipe-hint { display: block; margin: -3px 0 9px; color: #b5d1bf; font-size: 11px; font-weight: 700; }
+  .sidebar-swipe-hint span { color: var(--lime); }
   .run-nav { flex-direction: row; overflow-x: auto; padding: 0 0 4px; }
   .run-nav-item { min-width: 220px; max-width: 250px; padding: 11px; }
   .topbar { height: 54px; }
@@ -238,25 +250,27 @@ a { color: inherit; }
   .topbar-right { font-size: 9px; }
   .topbar-divider { display: none; }
   .topbar-right { white-space: normal; justify-content: flex-end; text-align: right; }
-  .main-inner { padding: 35px 18px 20px; }
-  .page-intro { display: block; padding-bottom: 28px; }
-  .page-intro h1 { font-size: clamp(48px, 11vw, 67px); }
+  .main-inner { padding: 24px 18px 20px; }
+  .page-intro { display: block; padding: 17px 0 20px; }
+  .page-intro h1 { margin-bottom: 12px; font-size: clamp(39px, 9vw, 58px); }
   .page-intro p { font-size: 14px; }
-  .intro-meta { border-top: 1px solid var(--line); flex-direction: row; flex-wrap: wrap; align-items: center; gap: 8px 13px; padding-top: 16px; margin-top: 27px; }
+  .mobile-evidence-jump { display: inline-flex; min-height: 44px; align-items: center; gap: 8px; margin-top: 9px; color: #315d4e; font-size: 12px; font-weight: 700; text-underline-offset: 3px; }
+  .intro-meta { border-top: 1px solid var(--line); flex-direction: row; flex-wrap: wrap; align-items: center; gap: 8px 13px; padding-top: 12px; margin-top: 16px; }
   .intro-meta .meta-eyebrow { width: 100%; }
   .intro-meta strong { font-size: 18px; }
   .intro-meta .sample-pill { margin-top: 0; }
-  .score-content { padding: 30px 25px; display: block; }
-  .score-copy h2 { font-size: clamp(35px, 8vw, 48px); }
+  .score-content { padding: 22px 25px; display: block; }
+  .score-copy h2 { margin: 15px 0 12px; font-size: clamp(32px, 7.5vw, 42px); }
   .score-copy p { font-size: 13px; }
-  .score-meter { width: 145px; margin: 32px 0 4px; }
-  .meter-inner strong { font-size: 58px; }
+  .score-status { margin-top: 16px; }
+  .score-meter { width: 118px; margin: 17px 0 4px; }
+  .meter-inner strong { font-size: 48px; }
   .score-footer { padding: 0 25px; }
   .score-footer > div { padding: 15px 8px 15px 0; }
   .score-footer > div + div { padding-left: 12px; }
   .score-footer span { font-size: 8px; }
   .score-footer strong { font-size: 23px; }
-  .section-heading { display: block; padding-top: 67px; }
+  .section-heading { display: block; padding-top: 46px; }
   .section-heading h2 { font-size: 40px; }
   .section-heading > p { margin-top: 19px; }
   .review-grid, .record-grid { grid-template-columns: 1fr; }
@@ -270,6 +284,8 @@ a { color: inherit; }
   .review-empty { padding: 25px; }
   .review-empty .review-primary { margin-top: 20px; width: 100%; }
   .proposal-card { padding: 25px; }
+  .proposal-checklist { padding: 17px; }
+  .proposal-checklist ul { grid-template-columns: 1fr; gap: 8px; }
   .decision-actions > button { width: 100%; }
   .comparison-heading .sample-pill { display: inline-flex; margin-top: 17px; }
   .comparison-scores { gap: 8px; }
